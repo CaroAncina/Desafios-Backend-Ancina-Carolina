@@ -1,0 +1,12 @@
+{
+  "name": "desafios-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "desafio_1.js",
+  "scripts": {
+    "start": "node --watch desafio_1/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
