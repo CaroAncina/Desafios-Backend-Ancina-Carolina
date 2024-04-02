@@ -1,69 +1,94 @@
 class ProductManager {
     constructor() {
-        this.products = []
+        this.products = [];
+        this.nextId = 1;
     }
 
-    addProduct(title, description, price, thumbnail, code, stock) {
-        //Verifico que no se repita el id
-        if (this.products.some(product => product.code === code)) {
+    addProduct(product) {
+        // Verifico que no se repita el id
+        if (this.products.some(p => p.code === product.code)) {
             console.log("Ya existe un producto con el mismo código.");
             return;
         }
 
-        //Verifico que se completen todos los campos
-        if (!title || !description || !price || !thumbnail || !code || !stock) {
+        // Verifico que se completen todos los campos
+        if (!product.title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock) {
             console.log("Todos los campos son obligatorios.");
             return;
         }
 
-        //se incrementa el id
-        const product_id = this.products.length + 1;
+        // Se incrementa el id
+        const product_id = this.nextId++;
 
-        const product = {
+        const newProduct = {
             id: product_id,
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock
+            ...product
         };
 
-        this.products.push(product);
+        this.products.push(newProduct);
     }
 
-    //devuelve el array con todos los productos agregados
+    // Devuelve el array con todos los productos agregados
     getProducts() {
-        return this.products
+        return this.products;
     }
 
-    //busca en el array los productos que coincidan con el id
-    getProductById(product_code) {
-        const producto_encontrado = this.products.find(product => product.code === product_code)
-    
-        if (producto_encontrado) {
-            return console.log ("El producto encontrado es:", producto_encontrado);
-        } else {
-            console.log("Not found");
+    // Busca en el array los productos que coincidan con el código
+    getProductById(product_id) {
+        const product = this.products.find(p => p.id === product_id);
+
+        if (!product) {
+            console.log("Producto no encontrado");
             return;
         }
-    }    
+        return product;
+    }
 }
 
 const productManager = new ProductManager();
 
-//Agrego productos al array
-productManager.addProduct("Zapatillas", "descripcion zapatillas", 20000, "No hay imagen", 101, 8)
-productManager.addProduct("Remera", "descripcion remera", 12000, "No hay imagen", 102, 12)
-productManager.addProduct("Jeans", "descripcion jeans", 18000, "No hay imagen", 103, 6)
-productManager.addProduct("Gorra", "descripcion gorra", 7000, "No hay imagen", 104, 9)
+// Agrego productos al array
+productManager.addProduct({
+    title: "Torta",
+    description: "Descripción del producto",
+    price: 5400,
+    thumbnail: 'ruta/imagenA.jpg',
+    code: 'B001',
+    stock: 5
+})
 
-//Muestro los productos 
+productManager.addProduct({
+    title: "Tarta frutal",
+    description: "Descripción del producto",
+    price: 4800,
+    thumbnail: 'ruta/imagenB.jpg',
+    code: 'B002',
+    stock: 3
+})
+
+productManager.addProduct({
+    title: "Lemon Pie",
+    description: "Descripción del producto",
+    price: 4000,
+    thumbnail: 'ruta/imagenC.jpg',
+    code: 'B003',
+    stock: 2
+})
+
+productManager.addProduct({
+    title: "Pan dulce",
+    description: "Descripción del producto",
+    price: 4500,
+    thumbnail: 'ruta/imagenD.jpg',
+    code: 'B004',
+    stock: 6
+})
+
+// Muestro los productos 
 const products = productManager.getProducts()
 console.log(products)
 
-//Muestro los productos que coincidad con el id
-const buscando_productos = productManager.getProductById(102)
-console.log(buscando_productos)
-
+// Muestro el producto que coincida con el id
+const buscando_producto = productManager.getProductById(2)
+console.log(buscando_producto)
 
