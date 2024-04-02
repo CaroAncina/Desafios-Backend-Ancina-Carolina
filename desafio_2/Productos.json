@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Torta",
+    "description": "Descripción del producto",
+    "price": 5400,
+    "thumbnail": "ruta/imagenA.jpg",
+    "code": "B001",
+    "stock": 5,
+    "id": 1
+  },
+  {
+    "title": "Pan dulce",
+    "description": "Descripción del producto",
+    "price": 4500,
+    "thumbnail": "ruta/imagenD.jpg",
+    "code": "B004",
+    "stock": 6,
+    "id": 4
+  }
+]
