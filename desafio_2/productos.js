@@ -54,8 +54,8 @@ manager.getproducts()
     .then(products => console.log('Lista de productos:', products))
     .catch(error => console.error("Error al mostrar el producto", error));
 
- /* // Obtener un producto por su ID después de actualizarlo
-manager.getproductsbyId(1)
+  // Obtener un producto por su ID después de actualizarlo
+manager.getproductsbyId(2)
     .then(product => console.log('El producto actualizado es:', product))
     .catch(error => console.error("Error al buscar el producto:", error));
 
@@ -65,8 +65,8 @@ manager.updateProduct(1, { price: 5600, stock: 7 })
     .catch(error => console.error("Error al actualizar el producto:", error));
 
 // Eliminar un producto por su ID
-manager.deleteProduct(3)
+manager.deleteProduct(4)
     .then(() => console.log("Producto eliminado correctamente"))
     .catch(error => console.error("Error al eliminar el producto:", error)); 
  
-  */
+  
