@@ -1,20 +1,47 @@
 [
   {
+    "id": 1,
     "title": "Torta",
     "description": "Descripción del producto",
     "price": 5400,
     "thumbnail": "ruta/imagenA.jpg",
     "code": "B001",
-    "stock": 5,
-    "id": 1
+    "stock": 5
   },
   {
+    "id": 2,
+    "title": "Tarta frutal",
+    "description": "Descripción del producto",
+    "price": 4800,
+    "thumbnail": "ruta/imagenB.jpg",
+    "code": "B002",
+    "stock": 3
+  },
+  {
+    "id": 3,
+    "title": "Lemon Pie",
+    "description": "Descripción del producto",
+    "price": 4000,
+    "thumbnail": "ruta/imagenC.jpg",
+    "code": "B003",
+    "stock": 2
+  },
+  {
+    "id": 4,
     "title": "Pan dulce",
     "description": "Descripción del producto",
     "price": 4500,
     "thumbnail": "ruta/imagenD.jpg",
     "code": "B004",
-    "stock": 6,
-    "id": 4
+    "stock": 6
+  },
+  {
+    "id": 5,
+    "title": "Budin",
+    "description": "Descripción del producto",
+    "price": 2500,
+    "thumbnail": "ruta/imagenE.jpg",
+    "code": "B005",
+    "stock": 8
   }
 ]

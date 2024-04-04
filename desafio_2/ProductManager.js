@@ -1,46 +1,51 @@
-const fs = require('fs').promises
+const fs = require('fs').promises;
 
 class ProductManager {
     constructor() {
-        this.productsFile = "Productos.json";
+        this.path = "Productos.json";
         this.nextId = 1;
+        this.products = [];
     }
 
     async addProduct(product) {
         try {
             let products = await this.getproducts();
-    
+
             // Verificar si el producto ya existe
-            const existingProduct = products.find(p => p.code === product.code);
-            if (existingProduct) {
-                console.log(`El producto con código ${product.code} ya existe. No se agregará.`);
+            const productoEncontrado = products.find((p) => p.code === product.code)
+            if (productoEncontrado) {
+                console.log("Ya existe un producto con el mismo código.");
                 return;
             }
-    
-            // Incrementar el ID y asignarlo al producto
-            product.id = this.nextId++;
-    
-            // Agregar el producto al array de productos
-            products.push(product);
-    
-            // Escribir el array de productos en el archivo
-            await fs.writeFile(this.productsFile, JSON.stringify(products, null, 2));
+            // Verifico que se completen todos los campos
+            if (!product.title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock) {
+                console.log("Todos los campos son obligatorios.");
+                return;
+            }
+
+            const newProduct = {
+                id: this.nextId++,
+                ...product
+            };
+
+            this.products.push(newProduct);
+
+            await fs.writeFile(this.path, JSON.stringify(this.products, null, 2));
             console.log("Producto agregado correctamente");
         } catch (error) {
             console.log("Error al cargar un producto", error);
         }
     }
-    
-    
+
     async getproducts() {
         try {
-            const data = await fs.readFile(this.productsFile, 'utf8')
-            return JSON.parse(data)
+            const data = await fs.readFile(this.path, 'utf8');
+            return JSON.parse(data);
         } catch (error) {
             if (error.code === 'ENOENT') {
-                return []
+                return [];
             } else {
-                throw error
+                throw error;
             }
         }
     }
@@ -73,7 +78,7 @@ class ProductManager {
                 // Actualizar el producto con los nuevos campos
                 products[index] = { ...products[index], ...updatedFields };
 
-                await fs.writeFile(this.productsFile, JSON.stringify(products, null, 2));
+                await fs.writeFile(this.path, JSON.stringify(products, null, 2));
                 console.log(`Producto con ID ${id} actualizado correctamente`);
             } else {
                 throw new Error(`Producto con ID ${id} no encontrado`);
@@ -90,7 +95,7 @@ class ProductManager {
             // Filtrar los productos para excluir el producto con el ID proporcionado
             const updatedProducts = products.filter(product => product.id !== id);
 
-            await fs.writeFile(this.productsFile, JSON.stringify(updatedProducts, null, 2));
+            await fs.writeFile(this.path, JSON.stringify(updatedProducts, null, 2));
             console.log(`Producto con ID ${id} eliminado correctamente`);
         } catch (error) {
             console.error("Error al eliminar el producto", error);
@@ -98,4 +103,4 @@ class ProductManager {
     }
 }
 
-module.exports = ProductManager
+module.exports = ProductManager;

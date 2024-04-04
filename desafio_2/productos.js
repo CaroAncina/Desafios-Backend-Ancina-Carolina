@@ -56,7 +56,7 @@ manager.getproducts()
 
   // Obtener un producto por su ID después de actualizarlo
 manager.getproductsbyId(2)
-    .then(product => console.log('El producto actualizado es:', product))
+    .then(product => console.log('El producto buscado es:', product))
     .catch(error => console.error("Error al buscar el producto:", error));
 
  // Actualizar un producto por su ID
