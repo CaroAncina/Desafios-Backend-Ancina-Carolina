@@ -1,8 +1,8 @@
 const fs = require('fs').promises;
 
 class ProductManager {
-    constructor() {
-        this.path = "Productos.json";
+    constructor(path) {
+        this.path = path;
         this.nextId = 1;
         this.products = [];
     }

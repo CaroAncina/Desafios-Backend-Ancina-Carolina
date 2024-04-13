@@ -1,6 +1,6 @@
 const ProductManager = require('./ProductManager.js')
 
-const manager = new ProductManager()
+const manager = new ProductManager("Productos.json")
 
 // Crear nuevos productos
 manager.addProduct({
