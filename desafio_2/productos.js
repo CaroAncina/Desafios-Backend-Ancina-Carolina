@@ -1,9 +1,6 @@
 const ProductManager = require('./ProductManager.js')
 
 const manager = new ProductManager('./Productos.json')
-manager.getproducts()
-
-//manager.getProduct()
 
 // Crear nuevos productos
 manager.addProduct({
@@ -53,28 +50,20 @@ manager.addProduct({
 
 
 
-
-
-
-
-/* // Consultar todos los productos
-manager.getproducts()
-    .then(products => console.log('Lista de productos:', products))
-    .catch(error => console.error("Error al mostrar el producto", error));
-
-  // Obtener un producto por su ID después de actualizarlo
+/* // Obtener un producto por su ID 
 manager.getproductsbyId(2)
     .then(product => console.log('El producto buscado es:', product))
-    .catch(error => console.error("Error al buscar el producto:", error));
+    .catch(error => console.error("Error al buscar el producto:", error)); 
 
- // Actualizar un producto por su ID
-manager.updateProduct(1, { price: 5600, stock: 7 })
-    .then(updatedProduct => console.log("Producto actualizado correctamente:", updatedProduct))
+ // Actualizar un producto por su ID 
+manager.updateProduct(1, { title: "Torta", description: "Descripcion del producto", price: 5600, thumbnail: 'ruta/imagenA.jpg', code: 'B001', stock: 7 })
+    .then(() => manager.getproducts())
+    .then(updatedProducts => console.log("Lista de productos actualizada:", updatedProducts))
     .catch(error => console.error("Error al actualizar el producto:", error));
 
-// Eliminar un producto por su ID
+ // Eliminar un producto por su ID 
 manager.deleteProduct(4)
-    .then(() => console.log("Producto eliminado correctamente"))
-    .catch(error => console.error("Error al eliminar el producto:", error)); 
-  */
-  
+   .then(() => manager.getproducts())
+   .then(updatedProducts => console.log("Lista de productos actualizada:", updatedProducts))
+   .catch(error => console.error("Error al eliminar el producto:", error));
+   */

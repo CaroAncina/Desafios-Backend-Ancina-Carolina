@@ -6,7 +6,7 @@ class ProductManager {
 
     constructor(path) {
         this.products = [],
-        this.path = path
+            this.path = path
     }
 
     async addProduct(newObjet) {
@@ -35,7 +35,7 @@ class ProductManager {
             }
 
             this.products.push(newProduct);
-            console.log(newProduct)
+            console.log(newProduct)//Mostrar los productos por consola, antes de cargarlos en el JSON
             await this.saveProducts(this.products);
 
         } catch (error) {
@@ -43,14 +43,9 @@ class ProductManager {
         }
     }
 
-   /*  async getProduct() {
-        console.log(this.products)
-    }
- */
     async getproducts() {
         try {
             const res = await fs.readFile(this.path, 'utf-8')
-            //console.log("Contenido del archivo:", res);
             const arrayDeProductos = JSON.parse(res)
             return arrayDeProductos
         } catch (error) {
@@ -66,7 +61,6 @@ class ProductManager {
             if (!idProduct) {
                 console.log('No se encuentra el producto')
             } else {
-                console.log('Producto encontrado')
                 return idProduct
             }
         } catch (error) {
@@ -92,7 +86,6 @@ class ProductManager {
     async deleteProduct(id) {
         try {
             const arrayProducts = await this.getproducts();
-
             const updatedProducts = arrayProducts.filter(item => item.id !== id);
             await this.saveProducts(updatedProducts);
         } catch (error) {
