@@ -1,6 +1,9 @@
 const ProductManager = require('./ProductManager.js')
 
-const manager = new ProductManager("Productos.json")
+const manager = new ProductManager('./Productos.json')
+manager.getproducts()
+
+//manager.getProduct()
 
 // Crear nuevos productos
 manager.addProduct({
@@ -49,7 +52,12 @@ manager.addProduct({
 })
 
 
-// Consultar todos los productos
+
+
+
+
+
+/* // Consultar todos los productos
 manager.getproducts()
     .then(products => console.log('Lista de productos:', products))
     .catch(error => console.error("Error al mostrar el producto", error));
@@ -68,5 +76,5 @@ manager.updateProduct(1, { price: 5600, stock: 7 })
 manager.deleteProduct(4)
     .then(() => console.log("Producto eliminado correctamente"))
     .catch(error => console.error("Error al eliminar el producto:", error)); 
- 
+  */
   
