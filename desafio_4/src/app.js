@@ -1,38 +1,40 @@
 const express = require('express');
-const path = require("path")
-const app = express()
+const path = require('path');
 const http = require('http');
 const socketIo = require('socket.io');
+const exphbs = require('express-handlebars');
+const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
-const PORT = 8080
-const handlebars = require('handlebars')
-const __dirname = require('./utils.js')
-const productsRouter = require("./routes/products.js")
-const cartsRouter = require("./routes/carts.js")
-const ProductManager = require("./classes/productManager.js")
-const productMngr = new ProductManager('./Productos.json')
+const PORT = 8080;
+const { dirname } = path;
 
-app.engine('handlebars', handlebars.engine())
-app.set('views', __dirname + '/views')
-app.set('view engine', 'handlebars')
 
-app.use(express.static(__dirname + '/public'))
+const productsRouter = require('./routes/products');
+const cartsRouter = require('./routes/carts');
+const viewsRouter = require('./routes/views');
+const ProductManager = require('./classes/productManager');
+const productManager = new ProductManager('./Productos.json');
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use("/api/products", productsRouter)
-app.use("/api/carts", cartsRouter)
+// RUTAS
+app.use('/api/products', productsRouter);
+app.use('/api/carts', cartsRouter);
+app.use('/', viewsRouter);
 
-// Ruta principal - Renderiza una vista utilizando Handlebars
-app.get('/', (req, res) => {
-    res.render('index', { title: 'Welcome to my App!' });
-});
+// HANDLEBARS
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
+app.set('views', path.join(__dirname, 'views'));
+
 
 // Configura Socket.IO para escuchar conexiones
 io.on('connection', (socket) => {
-    console.log('A user connected');
+    console.log('Usuario conectado');
 
     // Ejemplo de mensaje de chat (broadcast a todos los clientes)
     socket.on('chat message', (msg) => {
@@ -41,12 +43,16 @@ io.on('connection', (socket) => {
 
     // Manejo de desconexión de un usuario
     socket.on('disconnect', () => {
-        console.log('User disconnected');
+        console.log('Usuario desconectado');
     });
 });
 
+// Ruta principal - Renderiza una vista utilizando Handlebars
+app.get('/', (req, res) => {
+    res.render('index', { title: 'Welcome to my App!' });
+});
 
-
-app.listen(PORT, () => {
-    console.log(`server running on port ${PORT}`)
-})
+// Inicia el servidor
+server.listen(PORT, () => {
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
