@@ -1,7 +1,7 @@
 {
   "name": "desafios-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Desafios entregables curso Programación Backend Comisión 53150.",
   "main": "desafio_1.js",
   "scripts": {
     "start": "node --watch desafio_1/app.js"
