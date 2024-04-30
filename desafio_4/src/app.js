@@ -10,10 +10,6 @@ const socketServer = Server(httpServer);
 const ProductManager = require("./classes/productManager.js");
 const productMngr = new ProductManager('./Productos.json');
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 83b01996588628bdd5edf6b5943bdebc374f967a
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
