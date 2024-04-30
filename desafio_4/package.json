@@ -1,7 +1,15 @@
 {
+<<<<<<< HEAD
   "name": "desafio_4",
   "version": "1.0.0",
   "main": "index.js",
+=======
+  "name": "backend-ecommerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+>>>>>>> 83b01996588628bdd5edf6b5943bdebc374f967a
   "scripts": {
     "start": "node --watch desafio_4/src/app.js"
   },
@@ -13,6 +21,11 @@
     "express-handlebars": "^7.1.2",
     "handlebars": "^4.7.8",
     "socket.io": "^4.7.5"
+<<<<<<< HEAD
   },
   "description": ""
 }
+=======
+  }
+}
+>>>>>>> 83b01996588628bdd5edf6b5943bdebc374f967a
