@@ -1,0 +1,29 @@
+<div>
+    <h1>Lista de Productos</h1>
+    <ul id="product-list">
+        {{#each products}}
+        <li>{{this.title}} - Price: ${{this.price}}</li>
+        {{/each}}
+    </ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('product added', (product) => {
+            const productItem = `<li>${product.title} - Price: $${product.price}</li>`;
+            document.getElementById('product-list').innerHTML += productItem;
+        });
+
+        socket.on('product removed', (productId) => {
+            const productElement = document.querySelector(`li[data-product-id="${productId}"]`);
+            if (productElement) {
+                productElement.remove();
+            }
+        });
+    </script>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/realTimeProducts.js"></script>
+
+</div>
