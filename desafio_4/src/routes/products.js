@@ -7,7 +7,7 @@ const productManager = new ProductManager("./Productos.json");
 router.get('/', async (req, res) => {
     try {
         const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
-        const products = await productManager.getProducts(); 
+        const products = await productManager.getProducts();
         const response = limit ? products.slice(0, limit) : products;
         res.json(response);
     } catch (error) {
@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 router.get('/:pid', async (req, res) => {
     try {
         const productId = parseInt(req.params.pid);
-        const product = await productManager.getProductsbyId(productId); 
+        const product = await productManager.getProductsbyId(productId);
         if (product) {
             res.json(product);
         } else {
@@ -36,7 +36,7 @@ router.get('/:pid', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const { title, description, price, thumbnail, code, stock, category } = req.body;
-        await productManager.addProduct({ title, description, price, thumbnail, code, stock, category }); 
+        await productManager.addProduct({ title, description, price, thumbnail, code, stock, category });
         res.status(201).json({ message: 'Producto agregado correctamente' });
     } catch (error) {
         console.error('Error al agregar un nuevo producto:', error);
@@ -49,7 +49,7 @@ router.put('/:pid', async (req, res) => {
     try {
         const productId = parseInt(req.params.pid);
         const updatedFields = req.body;
-        await productManager.updateProduct(productId, updatedFields); 
+        await productManager.updateProduct(productId, updatedFields);
         res.status(200).json({ message: 'Producto actualizado correctamente' });
     } catch (error) {
         console.error('Error al actualizar el producto:', error);
@@ -61,7 +61,7 @@ router.put('/:pid', async (req, res) => {
 router.delete('/:pid', async (req, res) => {
     try {
         const productId = parseInt(req.params.pid);
-        await productManager.deleteProduct(productId); 
+        await productManager.deleteProduct(productId);
         res.status(200).json({ message: 'Producto eliminado correctamente' });
     } catch (error) {
         console.error('Error al eliminar el producto:', error);
