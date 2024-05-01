@@ -3,11 +3,14 @@ const app = express();
 const PORT = 8080;
 const path = require("path")
 const handlebars = require("express-handlebars");
+const http = require('http');
+const server = http.createServer(app);
+const io = require('socket.io')(server);
 const productsRouter = require("./routes/products.js")
 const cartsRouter = require("./routes/carts.js")
 const viewsRouter = require("./routes/views.js")
 const ProductManager = require("./classes/productManager.js");
-const productMngr = new ProductManager('./Productos.json');
+const productManager = new ProductManager('./Productos.json');
 
 // Middlewares
 app.use(express.json());
@@ -24,17 +27,32 @@ app.engine('handlebars', handlebars.engine());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
 
-
 app.get('/', async (req, res) => {
     try {
-        const products = await productMngr.getProducts();
-        res.render('home', { products }); 
+        const products = await productManager.getProducts();
+        res.render('home', { products });
     } catch (error) {
         console.error('Error al obtener los productos:', error);
         res.status(500).send('Error interno del servidor');
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`server running on port ${PORT}`)
-})
+io.on('connection', (socket) => {
+    console.log('Usuario conectado');
+
+    productManager.getProducts()
+        .then((productos) => {
+            socket.emit('productos', productos);
+        })
+        .catch((error) => {
+            console.error('Error al obtener los productos:', error);
+        });
+
+    socket.on('disconnect', () => {
+        console.log('Usuario desconectado');
+    });
+});
+
+server.listen(PORT, () => {
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
