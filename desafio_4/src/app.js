@@ -37,16 +37,41 @@ app.get('/', async (req, res) => {
     }
 });
 
+
 io.on('connection', (socket) => {
     console.log('Usuario conectado');
 
-    productManager.getProducts()
-        .then((productos) => {
-            socket.emit('productos', productos);
-        })
-        .catch((error) => {
-            console.error('Error al obtener los productos:', error);
-        });
+    productManager.getProducts().then((productos) => {
+        socket.emit('productos', productos);
+    });
+
+    socket.on('nuevoProducto', (producto) => {
+        productManager.addProduct(producto)
+            .then(() => {
+                return productManager.getProducts();
+            })
+            .then((productos) => {
+                io.emit('productos', productos);
+                socket.emit('respuestaAdd', 'Producto agregado correctamente');
+            })
+            .catch((error) => {
+                socket.emit('respuestaAdd', 'Error al agregar el producto: ' + error.message);
+            });
+    });
+
+    socket.on('eliminarProducto', (pid) => {
+        productManager.deleteProduct(pid)
+            .then(() => {
+                return productManager.getProducts();
+            })
+            .then((productos) => {
+                io.emit('productos', productos);
+                socket.emit('respuestaDelete', 'Producto eliminado correctamente');
+            })
+            .catch((error) => {
+                socket.emit('respuestaDelete', 'Error al eliminar el producto: ' + error.message);
+            });
+    });
 
     socket.on('disconnect', () => {
         console.log('Usuario desconectado');
