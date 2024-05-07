@@ -42,7 +42,7 @@ class ProductManager {
 
     async getProducts() {
         try {
-            const res = await fs.readFile(this.filePath, 'utf-8');
+            const res = await fs.readFile(this.path, 'utf-8');
             const arrayDeProductos = JSON.parse(res);
             return arrayDeProductos;
         } catch (error) {
@@ -103,7 +103,7 @@ class ProductManager {
 
     async saveProducts(arrayProducts) {
         try {
-            await fs.writeFile(this.filePath, JSON.stringify(arrayProducts, null, 2));
+            await fs.writeFile(this.path, JSON.stringify(arrayProducts, null, 2));
         } catch (error) {
             console.error('Error al guardar el archivo:', error);
             throw error; 

@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const ProductManager = require('../classes/productManager.js'); 
-const productManager = new ProductManager("./Productos.json"); 
+const ProductManager = require('../classes/productManager.js');
+const productManager = new ProductManager("./Productos.json");
 
 // Ruta para listar los productos
-router.get('/', async (req, res) => {
+ router.get('/', async (req, res) => {
     try {
         const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
         const products = await productManager.getProducts();
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Error al obtener los productos' });
     }
-});
+}); 
 
 // Ruta para obtener un producto por ID
 router.get('/:pid', async (req, res) => {
@@ -44,6 +44,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+
 // Ruta para actualizar un producto por su ID
 router.put('/:pid', async (req, res) => {
     try {
@@ -57,7 +58,7 @@ router.put('/:pid', async (req, res) => {
     }
 });
 
-// Ruta para eliminar un producto por su ID
+// Ruta para eliminar un producto por ID
 router.delete('/:pid', async (req, res) => {
     try {
         const productId = parseInt(req.params.pid);
@@ -68,5 +69,10 @@ router.delete('/:pid', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+
+
+module.exports = router;
+
+
 
 module.exports = router;
