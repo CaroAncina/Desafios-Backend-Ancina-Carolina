@@ -1,9 +1,8 @@
 const socket = io();
 const divListaProductos = document.getElementById('listaProductos');
-const mensaje = document.createElement('p');
+const form = document.getElementById('add-product-form');
+const listaProductos = document.getElementById('listaProductos');
 const btnEnviar = document.getElementById('btnEnviar');
-
-//btnEliminar.addEventListener('click')
 
 btnEnviar.addEventListener('click', () => {
     const title = document.getElementById('title').value;
@@ -11,8 +10,21 @@ btnEnviar.addEventListener('click', () => {
     const price = document.getElementById('price').value;
     const code = document.getElementById('code').value;
     const stock = document.getElementById('stock').value;
-    socket.emit('nuevoProducto', {title, description, price, code, stock});
-})
+    const category = document.getElementById('category').value;
+    const thumbnail = document.getElementById('thumbnail').value;
+
+    const newProduct = {
+        title,
+        description,
+        price,
+        code,
+        stock,
+        category,
+        thumbnail
+    };
+
+    socket.emit('nuevoProducto', newProduct);
+});
 
 socket.on('productos', productos => {
     const fragment = document.createDocumentFragment();
@@ -26,7 +38,7 @@ socket.on('productos', productos => {
             socket.emit('eliminarProducto', producto.id);
         });
 
-        p.innerHTML = `<strong>Title: </strong>${producto.title}, <strong>Description: </strong>${producto.description}, <strong>Price: </strong>${producto.price}, <strong>Code: </strong>${producto.code}, <strong>Stock: </strong>${producto.stock}`;
+        p.innerHTML = `<strong>Titulo: </strong>${producto.title}, <strong>Descripcion: </strong>${producto.description}, <strong>Precio: </strong>${producto.price}, <strong>Codigo: </strong>${producto.code}, <strong>Stock: </strong>${producto.stock}`;
 
         fragment.appendChild(p);
         fragment.appendChild(btnEliminar);

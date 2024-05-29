@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('nuevoProducto', (producto) => {
-        productManager.addProduct(producto.code, producto.title, producto.description, producto.price, [], producto.stock)
+        productManager.addProduct(producto)
             .then(() => {
                 return productManager.getProducts();
             })

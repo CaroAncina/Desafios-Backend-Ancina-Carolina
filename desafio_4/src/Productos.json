@@ -97,5 +97,19 @@
     "stock": 2,
     "status": true,
     "category": "Tortas"
+<<<<<<< HEAD
+  },
+  {
+    "id": 10,
+    "title": "Cheesecake",
+    "description": "Descripcion del producto",
+    "price": "7000",
+    "thumbnail": "",
+    "code": "B010",
+    "stock": "3",
+    "status": true,
+    "category": "Postres"
+=======
+>>>>>>> 1f39458d8c93cca128b84b41b9b744783ccbfed9
   }
 ]
