@@ -4,7 +4,7 @@
   "description": "Desafios entregables curso Programación Backend Comisión 53150.",
   "main": "desafio_1.js",
   "scripts": {
-    "start": "node --watch desafio_1/app.js"
+    "start": "node --watch src/app.js"
   },
   "keywords": [],
   "author": "",
