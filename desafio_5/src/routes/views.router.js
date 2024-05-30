@@ -6,53 +6,44 @@ import { isAuthenticated, isNotAuthenticated } from '../middleware/auth.js';
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-    try {
-        const products = await productsModel.find().lean();
-        res.render("home", { products });
-    } catch (error) {
-        console.error('Error al obtener productos:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
+router.get("/", (req, res) => {
+    res.redirect('/login');
 });
 
-router.get("/products", async (req, res) => {
-    try {
-        let { page = 1, limit = 10, sort, category } = req.query;
-        page = parseInt(page);
-        limit = parseInt(limit);
+router.get("/products", isAuthenticated, async (req, res) => {
+    let { page = 1, limit = 10, sort, category } = req.query;
+    page = parseInt(page);
+    limit = parseInt(limit);
 
-        let query = {};
-        if (category) {
-            query.category = category;
-        }
-
-        let sortOption = {};
-        if (sort === 'asc') {
-            sortOption.price = 1;
-        } else if (sort === 'desc') {
-            sortOption.price = -1;
-        }
-
-        let options = {
-            page,
-            limit,
-            sort: sortOption,
-            lean: true
-        };
-
-        let result = await productsModel.paginate(query, options);
-        result.prevLink = result.hasPrevPage ? `/products?page=${result.prevPage}&limit=${limit}&sort=${sort || ''}&category=${category || ''}` : '';
-        result.nextLink = result.hasNextPage ? `/products?page=${result.nextPage}&limit=${limit}&sort=${sort || ''}&category=${category || ''}` : '';
-        result.isValid = !(page <= 0 || page > result.totalPages);
-
-        res.render('products', result);
-    } catch (error) {
-        console.error('Error al obtener productos:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+    let query = {};
+    if (category) {
+        query.category = category;
     }
+
+    let sortOption = {};
+    if (sort === 'asc') {
+        sortOption.price = 1;
+    } else if (sort === 'desc') {
+        sortOption.price = -1;
+    }
+
+    let options = {
+        page,
+        limit,
+        sort: sortOption,
+        lean: true
+    };
+
+    let result = await productsModel.paginate(query, options);
+    result.prevLink = result.hasPrevPage ? `/products?page=${result.prevPage}&limit=${limit}&sort=${sort || ''}&category=${category || ''}` : '';
+    result.nextLink = result.hasNextPage ? `/products?page=${result.nextPage}&limit=${limit}&sort=${sort || ''}&category=${category || ''}` : '';
+    result.isValid = !(page <= 0 || page > result.totalPages);
+    result.user = req.session.user;
+
+    res.render('products', result);
 });
 
+// Muestra un producto por su id
 router.get('/products/:pid', async (req, res) => {
     try {
         const productId = req.params.pid;
@@ -78,8 +69,7 @@ router.get("/carts", async (req, res) => {
         const carts = await cartsModel.find().populate('products').lean();
         res.render("carts", { carts });
     } catch (error) {
-        console.error('Error al obtener carritos:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+        console.log(error);
     }
 });
 
@@ -91,10 +81,11 @@ router.get("/carts/:cid", async (req, res) => {
         if (!cart) {
             return res.status(404).json({ error: 'Carrito no encontrado' });
         }
-        res.render('cartProducts', { cart });
+        res.render('cartProducts', { cart: cart });
+
     } catch (error) {
         console.error('Error al obtener el carrito:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+        return res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
 

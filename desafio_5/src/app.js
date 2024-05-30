@@ -32,8 +32,13 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB }),
-    // cookie: { maxAge: 180 * 60 * 1000 },
+    cookie: { maxAge: 180 * 60 * 1000 },
 }));
+
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    next();
+});
 
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
