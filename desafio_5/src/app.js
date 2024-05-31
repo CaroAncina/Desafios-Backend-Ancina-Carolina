@@ -9,7 +9,7 @@ import productsRouter from './routes/api/products.router.js';
 import cartsRouter from './routes/api/carts.router.js';
 import messagesRouter from './routes/api/messages.router.js';
 import viewsRouter from './routes/views.router.js';
-import sessionsRouter from './routes/api/sessions.js';
+import sessionsRouter from './routes/api/sessions.router.js';
 import __dirname from './utils.js';
 import socketProducts from './socketProducts.js';
 
