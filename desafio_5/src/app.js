@@ -10,11 +10,8 @@ import cartsRouter from './routes/api/carts.router.js';
 import messagesRouter from './routes/api/messages.router.js';
 import viewsRouter from './routes/views.router.js';
 import sessionsRouter from './routes/api/sessions.js';
-import dotenv from 'dotenv';
 import __dirname from './utils.js';
 import socketProducts from './socketProducts.js';
-
-dotenv.config();
 
 const app = express();
 const PORT = 8080;

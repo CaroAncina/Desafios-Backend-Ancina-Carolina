@@ -9,6 +9,8 @@ router.post('/login', async (req, res) => {
 
     try {
         if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
+            console.log('Inicio de sesión del administrador');
+
             req.session.user = {
                 first_name: 'Admin',
                 last_name: 'Coder',
@@ -25,7 +27,7 @@ router.post('/login', async (req, res) => {
 
         const isMatch = bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(401).render('login', { error: 'Credenciales incorrectas' });
+            return res.status(401).render('login', { error: 'Email y/o contraseña incorrecta' });
         }
 
         req.session.user = {
@@ -37,7 +39,7 @@ router.post('/login', async (req, res) => {
 
         res.redirect('/products');
     } catch (error) {
-        console.error(error);
+        console.error('Error durante el inicio de sesión:', error);
         res.status(500).render('login', { error: 'Error interno del servidor' });
     }
 });
@@ -68,6 +70,7 @@ router.post('/register', async (req, res) => {
 router.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
+            console.error(err);
             return res.status(500).render('profile', { error: 'Error al cerrar sesión' });
         }
         res.redirect('/login');
@@ -77,11 +80,11 @@ router.get('/logout', (req, res) => {
 router.post('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
+            console.error(err);
             return res.status(500).render('profile', { error: 'Error al cerrar sesión' });
         }
         res.redirect('/login');
     });
 });
-
 
 export default router;
