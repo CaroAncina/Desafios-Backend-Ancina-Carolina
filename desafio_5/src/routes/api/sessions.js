@@ -74,4 +74,14 @@ router.get('/logout', (req, res) => {
     });
 });
 
+router.post('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).render('profile', { error: 'Error al cerrar sesión' });
+        }
+        res.redirect('/login');
+    });
+});
+
+
 export default router;
