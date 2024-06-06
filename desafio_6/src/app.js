@@ -3,7 +3,6 @@ import mongoose from './config/database.js';
 import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
 import session from 'express-session';
-import bodyParser from 'body-parser';
 import MongoStore from 'connect-mongo';
 import productsRouter from './routes/api/products.router.js';
 import cartsRouter from './routes/api/carts.router.js';
@@ -18,8 +17,8 @@ import initializePassport from './config/passport.config.js';
 const app = express();
 const PORT = 8080;
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
 app.engine('handlebars', handlebars.engine());
