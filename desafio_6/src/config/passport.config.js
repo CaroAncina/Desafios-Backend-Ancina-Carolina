@@ -12,7 +12,7 @@ const initializePassport = () => {
                 const { first_name, last_name, age } = req.body;
                 let user = await userService.findOne({ email: email });
                 if (user) {
-                    return done(null, false, { message: 'No existe el usuario' });
+                    return done(null, false, { message: 'El usuario ya existe' });
                 }
                 const newUser = {
                     first_name,
@@ -59,7 +59,7 @@ const initializePassport = () => {
                 let newUser = {
                     first_name: profile._json.name || profile.username,
                     last_name: "",
-                    age: 20,
+                    age: 27,
                     email: profile._json.email || `${profile.username}@github.com`,
                     password: ""
                 };
