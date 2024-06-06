@@ -28,3 +28,10 @@
   - *Cuenta con un hasheo de contraseña utilizando bcrypt*
   - *Cuenta con una implementación de passport, tanto para register como para login.*
   - *Implementa el método de autenticación de GitHub a la vista de login.*
+
+## 6.Desafío: Refactor a nuestro login
+
+  -* Cuenta con un hasheo de contraseña utilizando bcrypt
+  - Cuenta con una implementación de passport, tanto para register como para login.
+  - Implementa el método de autenticación de GitHub a la vista de login.*
+
