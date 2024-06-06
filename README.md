@@ -28,7 +28,3 @@
   - *Cuenta con un hasheo de contraseña utilizando bcrypt*
   - *Cuenta con una implementación de passport, tanto para register como para login.*
   - *Implementa el método de autenticación de GitHub a la vista de login.*
-<<<<<<< HEAD
-
-=======
->>>>>>> e7c94588d669ea8e1f93f7ef41f56c1a17c5a4dd
