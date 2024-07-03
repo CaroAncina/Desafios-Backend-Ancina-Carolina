@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        {{#if user}}
+        <p>
+            {{user.first_name}} {{user.last_name}} ({{user.role}}) | 
+            <a href="/api/sessions/logout">Cerrar sesión</a> | 
+            <a href="/profile">Perfil</a> | 
+            <a href="/carts/{{user.cart._id}}">Carro de compras</a>
+        </p>
+        {{/if}}
+    </header>
+    {{{ body }}}
+</body>
+
+</html>
