@@ -28,6 +28,16 @@ export const createUser = async (req, res) => {
     }
 };
 
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await UserService.getAllUsers();
+        res.status(200).json({ result: "success", users });
+    } catch (error) {
+        console.error('Error al obtener todos los usuarios:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
 export const updateUser = async (req, res) => {
     const { uid } = req.params;
     const updatedUser = req.body;

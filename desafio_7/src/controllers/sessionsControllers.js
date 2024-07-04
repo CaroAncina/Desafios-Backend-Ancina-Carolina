@@ -1,12 +1,10 @@
-import sessionsService from '../services/sessionsService.js';
-
 class SessionsController {
     async register(req, res) {
         res.redirect('/login');
     }
 
     async failRegister(req, res) {
-        res.send({ error: "Falló el registro" });
+        res.status(400).send({ error: "Falló el registro" });
     }
 
     async login(req, res) {
@@ -23,7 +21,7 @@ class SessionsController {
     }
 
     async failLogin(req, res) {
-        res.send({ error: "Login fallido" });
+        res.status(400).send({ error: "Login fallido" });
     }
 
     async logout(req, res) {
@@ -34,12 +32,19 @@ class SessionsController {
     }
 
     async github(req, res) {
-        // Esta ruta solo redirige a GitHub para autenticación
+        // Redirige a GitHub para autenticación
     }
 
     async githubCallback(req, res) {
-        req.session.user = req.user;
-        res.redirect('/');
+        req.session.user = {
+            first_name: req.user.first_name,
+            last_name: req.user.last_name,
+            email: req.user.email,
+            age: req.user.age,
+            cart: req.user.cart,
+            role: req.user.role
+        };
+        res.redirect('/products');
     }
 }
 

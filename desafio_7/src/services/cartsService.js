@@ -1,4 +1,4 @@
-import cartsData from '../dao/data/cartsData.js';
+import cartsData from '../dao/classes/carts.dao.js';
 
 class CartService {
     async getCarts() {
@@ -14,7 +14,7 @@ class CartService {
     }
 
     async addProductToCart(userId, productId) {
-        const user = await userService.getUserById(userId); // Asegúrate de tener un userService con getUserById
+        const user = await userService.getUserById(userId); 
         if (!user || !user.cart) {
             throw new Error('Usuario no logueado o carrito no encontrado');
         }

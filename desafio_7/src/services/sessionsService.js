@@ -1,66 +1,38 @@
-import passport from 'passport';
-import UserService from '../services/usersService.js'
+const register = (req, res) => {
+    res.status(200).json({ message: "Usuario registrado exitosamente" });
+};
 
-export default class SessionService {
-    static async registerUser(req, res, next) {
-        passport.authenticate('register', (err, user, info) => {
-            if (err) {
-                return res.status(500).json({ status: "error", error: err.message });
-            }
-            if (!user) {
-                return res.status(400).json({ status: "error", error: info.message });
-            }
-            req.logIn(user, (err) => {
-                if (err) {
-                    return res.status(500).json({ status: "error", error: err.message });
-                }
-                res.status(200).json({ status: "success", user });
-            });
-        })(req, res, next);
-    }
+const failRegister = (req, res) => {
+    res.status(400).json({ message: "Registro fallido" });
+};
 
-    static async loginUser(req, res, next) {
-        passport.authenticate('login', (err, user, info) => {
-            if (err) {
-                return res.status(500).json({ status: "error", error: err.message });
-            }
-            if (!user) {
-                return res.status(400).json({ status: "error", error: info.message });
-            }
-            req.logIn(user, (err) => {
-                if (err) {
-                    return res.status(500).json({ status: "error", error: err.message });
-                }
-                req.session.user = {
-                    first_name: user.first_name,
-                    last_name: user.last_name,
-                    email: user.email,
-                    age: user.age,
-                    cart: user.cart,
-                    role: user.role
-                };
-                res.status(200).json({ status: "success", user: req.session.user });
-            });
-        })(req, res, next);
-    }
+const login = (req, res) => {
+    res.status(200).json({ message: "Usuario conectado exitosamente" });
+};
 
-    static async logoutUser(req, res) {
-        req.session.destroy(err => {
-            if (err) return res.status(500).json({ status: "error", error: 'Error al cerrar sesión' });
-            res.status(200).json({ status: "success", message: 'Sesión cerrada exitosamente' });
-        });
-    }
+const failLogin = (req, res) => {
+    res.status(400).json({ message: "Usuario fallido" });
+};
 
-    static async githubAuth(req, res, next) {
-        passport.authenticate('github', { scope: ['user:email'] })(req, res, next);
-    }
+const logout = (req, res) => {
+    req.logout();
+    res.status(200).json({ message: "Usuario desconectado exitosamente" });
+};
 
-    static async githubCallback(req, res, next) {
-        passport.authenticate('github', { failureRedirect: '/login' })(req, res, next);
-    }
+const github = (req, res) => {
+    // registro con github
+};
 
-    static async setSessionUser(req, res) {
-        req.session.user = req.user;
-        res.redirect('/');
-    }
-}
+const githubCallback = (req, res) => {
+    res.status(200).json({ message: "Autenticacion de GitHub exitosa" });
+};
+
+export default {
+    register,
+    failRegister,
+    login,
+    failLogin,
+    logout,
+    github,
+    githubCallback
+};

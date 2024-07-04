@@ -1,4 +1,4 @@
-import messagesData from '../dao/data/messagesData.js';
+import messagesData from '../dao/classes/messages.dao.js';
 
 class MessagesService {
     async getMessages() {
