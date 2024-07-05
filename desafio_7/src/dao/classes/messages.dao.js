@@ -1,24 +1,21 @@
-import Message from '../models/messagesModel.js';
+import messagesModel from '../models/messagesModel.js';
 
-class MessagesData {
+class MessagesMongoDAO {
     async findAll() {
         try {
-            return await Message.find().populate('user', 'first_name last_name').lean();
+            return await messagesModel.find().populate('user').lean();
         } catch (error) {
-            console.error('Error al obtener los mensajes:', error);
             throw error;
         }
     }
 
-    async create(messageData) {
+    async create(message) {
         try {
-            const newMessage = new Message(messageData);
-            return await newMessage.save();
+            return await messagesModel.create(message); 
         } catch (error) {
-            console.error('Error al guardar el mensaje:', error);
             throw error;
         }
     }
 }
 
-export default new MessagesData();
+export default new MessagesMongoDAO();

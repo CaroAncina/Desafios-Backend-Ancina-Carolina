@@ -1,41 +1,52 @@
-import cartsData from '../dao/classes/carts.dao.js';
+import userService from '../dao/models/usersModel.js';
+import CartsMongoDAO from '../dao/classes/carts.dao.js';
 
 class CartService {
     async getCarts() {
-        return await cartsData.findAll();
+        return await CartsMongoDAO.findAll();
     }
 
     async getCartById(cartId) {
-        return await cartsData.findById(cartId);
+        return await CartsMongoDAO.findById(cartId);
     }
 
     async createCart() {
-        return await cartsData.create();
+        return await CartsMongoDAO.create();
     }
 
     async addProductToCart(userId, productId) {
-        const user = await userService.getUserById(userId); 
-        if (!user || !user.cart) {
-            throw new Error('Usuario no logueado o carrito no encontrado');
+        try {
+            const user = await userService.findById(userId).populate('cart').lean();
+            if (!user || !user.cart) {
+                throw new Error('Carrito no encontrado');
+            }
+
+            const cart = await CartsMongoDAO.findById(user.cart._id);
+            const productIndex = cart.products.findIndex(p => p.product.toString() === productId);
+
+            if (productIndex !== -1) {
+                cart.products[productIndex].quantity += 1;
+            } else {
+                cart.products.push({ product: productId, quantity: 1 });
+            }
+            await cart.save();
+            return cart;
+        } catch (error) {
+            console.error('Error al agregar producto al carrito:', error);
+            throw error;
         }
-
-        return await cartsData.addProductToCart(user.cart, productId);
-    }
-
-    async updateCart(cartId, products) {
-        return await cartsData.updateById(cartId, { products });
     }
 
     async updateProductQuantity(cartId, productId, quantity) {
-        return await cartsData.updateProductQuantity(cartId, productId, quantity);
+        return await CartsMongoDAO.updateProductQuantity(cartId, productId, quantity);
     }
 
     async clearCart(cartId) {
-        return await cartsData.clearCart(cartId);
+        return await CartsMongoDAO.clearCart(cartId);
     }
 
     async removeProductFromCart(cartId, productId) {
-        return await cartsData.removeProductFromCart(cartId, productId);
+        return await CartsMongoDAO.removeProductFromCart(cartId, productId);
     }
 }
 

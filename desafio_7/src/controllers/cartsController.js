@@ -41,24 +41,16 @@ export const addProductToCart = async (req, res) => {
         const pid = req.params.pid;
         const user = req.user;
 
+        if (!user) {
+            return res.status(401).json({ error: 'Usuario no autenticado' });
+        }
+
         const cart = await CartService.addProductToCart(user._id, pid);
 
         return res.status(200).json({ message: 'Producto agregado al carrito con éxito', cart });
     } catch (error) {
         console.error('Error al agregar el producto al carrito:', error);
         return res.status(500).json({ error: 'Error al agregar el producto al carrito' });
-    }
-};
-
-export const updateCart = async (req, res) => {
-    const { cid } = req.params;
-    const { products } = req.body;
-    try {
-        const updatedCart = await CartService.updateCart(cid, products);
-        res.status(200).json({ result: "success", payload: updatedCart });
-    } catch (error) {
-        console.error("Error al actualizar carrito:", error);
-        res.status(500).json({ result: "error", error: "Error al actualizar carrito" });
     }
 };
 
