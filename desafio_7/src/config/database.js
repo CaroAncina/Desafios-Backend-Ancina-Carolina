@@ -13,4 +13,8 @@ db.once('open', () => {
     console.log('Connected to MongoDB');
 });
 
-export default db;
+export default {
+    port: process.env.PORT || 8080,
+    mongoURI: process.env.MONGODB,
+    sessionSecret: process.env.SESSION_SECRET || 'secretkey'
+};

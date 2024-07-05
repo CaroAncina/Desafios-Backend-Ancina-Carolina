@@ -32,7 +32,7 @@ app.set('view engine', 'handlebars');
 
 // Middleware de sesión
 app.use(session({
-    secret: 'secretkey',
+    secret: 'config.sessionSecret',
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB }),
