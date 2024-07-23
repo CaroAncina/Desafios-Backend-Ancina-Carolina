@@ -33,3 +33,6 @@
 
    *El proyecto debe contar con capas de routing, controlador, dao, con nuestras vistas bien separadas y con las responsabilidades correctamente delegadas.*
   
+## 8.Desafío: Mocking y manejo de errores
+
+   *Se aplicará un módulo de mocking y un manejador de errores al servidor.*

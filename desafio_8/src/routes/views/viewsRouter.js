@@ -13,6 +13,6 @@ router.get("/chat", viewsController.getChatPage);
 router.get("/login", isNotAuthenticated, viewsController.getLoginPage);
 router.get("/register", isNotAuthenticated, viewsController.getRegisterPage);
 router.get("/profile", isAuthenticated, viewsController.getProfilePage);
-router.get("/current",isAuthenticated, viewsController.currentPage)
+router.get("/current",isAuthenticated, viewsController.currentPage);
 
 export default router;

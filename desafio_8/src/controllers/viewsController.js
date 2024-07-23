@@ -56,7 +56,7 @@ class ViewsController {
         try {
             const messages = await viewsService.getMessages();
             res.render('chat', {
-                userId: req.session.user._id, 
+                userId: req.session.user._id,
                 messages
             });
         } catch (error) {
@@ -65,7 +65,7 @@ class ViewsController {
         }
     }
 
-    async currentPage(req,res){
+    async currentPage(req, res) {
         res.render('/current')
     }
 

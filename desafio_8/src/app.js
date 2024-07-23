@@ -4,7 +4,7 @@ import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
-import __dirname from './utils.js';
+import { __dirname } from './utils.js';
 import socketProducts from './public/js/socketProducts.js';
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
@@ -17,6 +17,7 @@ import messagesRouter from './routes/api/messagesRouter.js';
 import sessionsRouter from './routes/api/sessionsRouter.js';
 import ticketsRouter from './routes/api/ticketsRouter.js'
 import viewsRouter from './routes/views/viewsRouter.js';
+import mockingProducts from './routes/api/mockingProducts.js'
 
 const app = express();
 const PORT = process.env.PORT;
@@ -61,6 +62,7 @@ app.use('/api/messages', messagesRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use ('/api/tickets',ticketsRouter);
 app.use('/', viewsRouter);
+app.use('/api/mockingproducts', mockingProducts); 
 
 // Inicializar servidor HTTP y configurar Socket.IO
 const httpServer = app.listen(PORT, () => {
