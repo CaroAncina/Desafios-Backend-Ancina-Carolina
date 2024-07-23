@@ -1,11 +1,19 @@
 import UserService from '../services/usersService.js';
+import CustomError from '../services/errors/CustomError.js';
+import EErrors from '../services/errors/EErrors.js';
+import { generateUserErrorInfo } from '../services/errors/Info.js';
 
 export const getUserByEmail = async (req, res) => {
     try {
         const email = req.params.email;
         const user = await UserService.getUserByEmail(email);
         if (!user) {
-            return res.status(404).json({ error: 'Usuario no encontrado' });
+            CustomError.createError({
+                name: "UserNotFoundError",
+                cause: `Usuario con email ${email} no encontrado`,
+                message: "Usuario no encontrado",
+                code: EErrors.ROUTING_ERROR
+            });
         }
         res.status(200).json({ result: "success", user });
     } catch (error) {
@@ -17,7 +25,12 @@ export const getUserByEmail = async (req, res) => {
 export const createUser = async (req, res) => {
     const { first_name, last_name, email, password, age } = req.body;
     if (!first_name || !last_name || !email || !password || !age) {
-        return res.status(400).json({ result: "error", error: "Faltan parámetros obligatorios" });
+        CustomError.createError({
+            name: "UserCreationError",
+            cause: generateUserErrorInfo({ first_name, last_name, email }),
+            message: "Error tratando de crear el usuario",
+            code: EErrors.INVALID_TYPES_ERROR
+        });
     }
     try {
         const newUser = await UserService.createUser({ first_name, last_name, email, password, age });
@@ -43,6 +56,14 @@ export const updateUser = async (req, res) => {
     const updatedUser = req.body;
     try {
         const result = await UserService.updateUser(uid, updatedUser);
+        if (!result) {
+            CustomError.createError({
+                name: "UserNotFoundError",
+                cause: `Usuario con ID ${uid} no encontrado`,
+                message: "Usuario no encontrado",
+                code: EErrors.ROUTING_ERROR
+            });
+        }
         res.status(200).json({ result: "success", payload: result });
     } catch (error) {
         console.error("Error al actualizar usuario:", error);
@@ -54,6 +75,14 @@ export const deleteUser = async (req, res) => {
     const { uid } = req.params;
     try {
         const result = await UserService.deleteUser(uid);
+        if (!result) {
+            CustomError.createError({
+                name: "UserNotFoundError",
+                cause: `Usuario con ID ${uid} no encontrado`,
+                message: "Usuario no encontrado",
+                code: EErrors.ROUTING_ERROR
+            });
+        }
         res.status(200).json({ result: "success", payload: result });
     } catch (error) {
         console.error("Error al eliminar usuario:", error);

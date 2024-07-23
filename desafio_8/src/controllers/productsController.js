@@ -1,4 +1,7 @@
 import ProductService from '../services/productsService.js';
+import CustomError from '../services/errors/CustomError.js';
+import EErrors from '../services/errors/EErrors.js';
+import { generateProductErrorInfo } from '../services/errors/Info.js';
 
 export const getAllProducts = async (req, res) => {
     try {
@@ -57,7 +60,12 @@ export const getProductById = async (req, res) => {
         const product = await ProductService.getProductById(productId);
 
         if (!product) {
-            return res.status(404).json({ error: 'Producto no encontrado' });
+            CustomError.createError({
+                name: "ProductNotFoundError",
+                cause: `Producto con ID ${productId} no encontrado`,
+                message: "Producto no encontrado",
+                code: EErrors.ROUTING_ERROR
+            });
         }
 
         res.status(200).json({ result: "success", product });
@@ -70,7 +78,12 @@ export const getProductById = async (req, res) => {
 export const createProduct = async (req, res) => {
     const { title, description, price, code, stock, category, thumbnail } = req.body;
     if (!title || !description || !price || !code || !stock || !category) {
-        return res.status(400).json({ result: "error", error: "Faltan parámetros obligatorios" });
+        CustomError.createError({
+            name: "ProductCreationError",
+            cause: generateProductErrorInfo({ title, description, price }),
+            message: "Error tratando de crear el producto",
+            code: EErrors.INVALID_TYPES_ERROR
+        });
     }
     try {
         const productData = { title, description, price, code, stock, category };
@@ -85,27 +98,37 @@ export const createProduct = async (req, res) => {
     }
 };
 
-export const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res, next) => {
     const { pid } = req.params;
     const { title, description, price, code, stock, category, thumbnail } = req.body;
     try {
         const updatedProduct = await ProductService.updateProduct(pid, { title, description, price, code, stock, category, thumbnail });
         if (!updatedProduct) {
-            return res.status(404).json({ result: "error", error: "Producto no encontrado" });
+            CustomError.createError({
+                name: "ProductNotFoundError",
+                cause: `Producto con ID ${pid} no encontrado`,
+                message: "Producto no encontrado",
+                code: EErrors.ROUTING_ERROR
+            });
         }
         res.status(200).json({ result: "success", payload: updatedProduct });
     } catch (error) {
-        console.error("Error al actualizar producto:", error);
-        res.status(500).json({ result: "error", error: "Error al actualizar producto" });
+        next(error);
     }
 };
+
 
 export const deleteProduct = async (req, res) => {
     const { pid } = req.params;
     try {
         const deletedProduct = await ProductService.deleteProduct(pid);
         if (!deletedProduct) {
-            return res.status(404).json({ result: "error", error: "Producto no encontrado" });
+            CustomError.createError({
+                name: "ProductNotFoundError",
+                cause: `Producto con ID ${pid} no encontrado`,
+                message: "Producto no encontrado",
+                code: EErrors.ROUTING_ERROR
+            });
         }
         res.status(200).json({ result: "success", payload: deletedProduct });
     } catch (error) {

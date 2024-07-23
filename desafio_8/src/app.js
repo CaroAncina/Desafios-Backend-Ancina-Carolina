@@ -8,6 +8,7 @@ import { __dirname } from './utils.js';
 import socketProducts from './public/js/socketProducts.js';
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
+import errorHandler from './middleware/errorhandler.js';
 
 // Importar Rutas
 import usersRoutes from './routes/api/usersRouter.js';
@@ -26,6 +27,7 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
+app.use(errorHandler);
 
 // Handlebars 
 const hbs = handlebars.create({

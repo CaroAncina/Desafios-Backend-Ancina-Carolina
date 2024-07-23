@@ -1,7 +1,10 @@
 import CartService from '../services/cartsService.js';
 import ProductModel from '../dao/models/productsModel.js';
 import ticketsService from '../services/ticketsService.js';
-import  {sendPurchaseEmail}  from '../services/mailer.js';
+import { sendPurchaseEmail } from '../services/mailer.js';
+import CustomError from '../services/errors/CustomError.js';
+import EErrors from '../services/errors/EErrors.js';
+import { generateCartErrorInfo } from '../services/errors/Info.js';
 
 export const getCarts = async (req, res) => {
     try {
@@ -19,9 +22,13 @@ export const getCartById = async (req, res) => {
         const cart = await CartService.getCartById(cartId);
 
         if (!cart) {
-            return res.status(404).json({ error: 'Carrito no encontrado' });
+            CustomError.createError({
+                name: "CartNotFoundError",
+                cause: `Carrito con ID ${cartId} no encontrado`,
+                message: "Carrito no encontrado",
+                code: EErrors.ROUTING_ERROR
+            });
         }
-
         return res.status(200).json(cart);
     } catch (error) {
         console.error('Error al obtener el carrito:', error);
@@ -35,9 +42,13 @@ export const addProductToCart = async (req, res) => {
         const { user } = req;
 
         if (!user) {
-            return res.status(401).json({ error: 'Usuario no autenticado' });
+            CustomError.createError({
+                name: "UserNotAuthenticatedError",
+                cause: "Usuario no autenticado",
+                message: "Usuario no autenticado",
+                code: EErrors.INVALID_TYPES_ERROR
+            });
         }
-
         const cart = await CartService.addProductToCart(user._id, pid);
 
         return res.status(200).json({ message: 'Producto agregado al carrito con éxito', cart });
@@ -87,7 +98,12 @@ export const purchaseCart = async (req, res) => {
     try {
         const cart = await CartService.getCartById(cid);
         if (!cart) {
-            return res.status(404).json({ error: 'Carrito no encontrado' });
+            CustomError.createError({
+                name: "CartNotFoundError",
+                cause: `Carrito con ID ${cid} no encontrado`,
+                message: "Carrito no encontrado",
+                code: EErrors.ROUTING_ERROR
+            });
         }
 
         let totalAmount = 0;
