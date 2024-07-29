@@ -36,3 +36,7 @@
 ## 8.Desafío: Mocking y manejo de errores
 
    *Se aplicará un módulo de mocking y un manejador de errores al servidor.*
+
+## 9.Desafío: Implementación de logger
+
+   *A partir del proyecto principal,se implementa un logger para desarrollo y un logger para producción*
