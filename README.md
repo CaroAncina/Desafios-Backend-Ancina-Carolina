@@ -40,3 +40,7 @@
 ## 9.Desafío: Implementación de logger
 
    *A partir del proyecto principal,se implementa un logger para desarrollo y un logger para producción*
+   
+## 10.Desafío: Documentar API
+
+   *Se implementa Swagger para documentar el proyecto, en este caso, los módulos de productos y carritos.*
