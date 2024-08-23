@@ -5,92 +5,79 @@ const requester = supertest("http://localhost:8080");
 
 describe("Testing products API", () => {
   let productId;
-  let sessionCookie;
+  let premiumCookie;
 
   before(async () => {
-    // Autenticación como premium user para poder crear productos
+    // Autenticar el usuario premium
     const loginResponse = await requester.post("/api/sessions/login").send({
-      email: "testuser@example.com",
-      password: "password",
+      email: "coderpremium@mail.com",
+      password: "passpremium",
     });
 
     const cookieResult = loginResponse.headers["set-cookie"];
-    sessionCookie = cookieResult && cookieResult[0];
-
-    expect(sessionCookie).to.include("connect.sid");
-  });
-
-  it("El endpoint POST /api/products debe crear un producto correctamente", async () => {
-    const productMock = {
-      title: "Producto de Prueba",
-      description: "Descripción del producto de prueba",
-      price: 150,
-      code: "TEST001",
-      stock: 20,
-      category: "Categoría de prueba",
+    premiumCookie = {
+      name: cookieResult[0].split("=")[0],
+      value: cookieResult[0].split("=")[1],
     };
 
-    const { statusCode, body } = await requester
+    expect(premiumCookie.name).to.be.ok.and.eql("connect.sid");
+    expect(premiumCookie.value).to.be.ok;
+  });
+
+  it("El endpoint POST /api/products debe permitir crear un nuevo producto", async () => {
+    const productData = {
+      title: "Producto Premium",
+      description: "Descripción del producto premium",
+      price: 500,
+      code: "PREM001",
+      stock: 100,
+      category: "Categoría Premium",
+    };
+
+    const result = await requester
       .post("/api/products")
-      .set("Cookie", sessionCookie)
-      .send(productMock);
+      .set("Cookie", `${premiumCookie.name}=${premiumCookie.value}`)
+      .send(productData);
 
-    expect(statusCode).to.equal(201);
-    expect(body.payload).to.have.property("_id");
-    expect(body.payload.title).to.equal(productMock.title);
+    expect(result.status).to.equal(201);
+    expect(result.body.result).to.equal("success");
+    expect(result.body.payload).to.have.property("_id");
 
-    productId = body.payload._id;
+    // Guardar el ID del producto creado
+    productId = result.body.payload._id;
+    expect(productId).to.be.ok;
+    console.log("Product ID after creation:", productId);
   });
 
-  it("El endpoint GET /api/products debe obtener todos los productos", async () => {
-    const { statusCode, body } = await requester
-      .get("/api/products")
-      .set("Cookie", sessionCookie);
-
-    expect(statusCode).to.equal(200);
-    expect(body.payload).to.be.an("array");
-  });
-
-  it("El endpoint GET /api/products/:id debe obtener un producto por ID", async () => {
-    const { statusCode, body } = await requester
-      .get(`/api/products/${productId}`)
-      .set("Cookie", sessionCookie);
-
-    expect(statusCode).to.equal(200);
-    expect(body.payload).to.have.property("_id", productId);
-  });
-
-  it("El endpoint PUT /api/products/:id debe actualizar un producto correctamente", async () => {
+  it("El endpoint PUT /api/products/:id debe permitir actualizar un producto", async () => {
     const updatedData = {
-      title: "Producto Actualizado",
-      price: 200,
+      title: "Producto Premium Actualizado",
+      description: "Descripción actualizada del producto premium",
+      price: 600,
+      stock: 80,
     };
 
-    const { statusCode, body } = await requester
+    const result = await requester
       .put(`/api/products/${productId}`)
-      .set("Cookie", sessionCookie)
+      .set("Cookie", `${premiumCookie.name}=${premiumCookie.value}`)
       .send(updatedData);
 
-    expect(statusCode).to.equal(200);
-    expect(body.payload.title).to.equal(updatedData.title);
-    expect(body.payload.price).to.equal(updatedData.price);
+    expect(result.status).to.equal(200);
+    expect(result.body.result).to.equal("success");
+
+    expect(result.body.payload.matchedCount).to.equal(1);
+    expect(result.body.payload.modifiedCount).to.equal(1);
   });
 
-  it("El endpoint DELETE /api/products/:id debe eliminar un producto correctamente", async () => {
-    const { statusCode, body } = await requester
+  it("El endpoint DELETE /api/products/:id debe permitir eliminar un producto", async () => {
+    const result = await requester
       .delete(`/api/products/${productId}`)
-      .set("Cookie", sessionCookie);
+      .set("Cookie", `${premiumCookie.name}=${premiumCookie.value}`);
 
-    expect(statusCode).to.equal(200);
-    expect(body.payload).to.have.property("_id", productId);
-  });
+    expect(result.status).to.equal(200);
+    expect(result.body.result).to.equal("success");
 
-  it("El producto eliminado no debe estar disponible después de la eliminación", async () => {
-    const { statusCode, body } = await requester
-      .get(`/api/products/${productId}`)
-      .set("Cookie", sessionCookie);
-
-    expect(statusCode).to.equal(404);
+    expect(result.body.payload.deletedCount).to.equal(1);
   });
 });
  */

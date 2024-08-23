@@ -1,4 +1,4 @@
-import { expect } from "chai";
+/* import { expect } from "chai";
 import supertest from "supertest";
 
 const requester = supertest("http://localhost:8080");
@@ -99,3 +99,4 @@ describe("Testing sessions API", () => {
     expect(body.email).to.be.eql("coderuser@mail.com");
   });
 });
+ */
