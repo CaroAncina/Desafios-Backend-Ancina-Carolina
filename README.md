@@ -49,8 +49,8 @@
 
    *Se implementa mocha+chai+supertest como modulos de testing.*
  - *Se incluyen 3 test desarrollados para:*
-     +  Router de products
-     +  Router de carts
-     +  Router de Sessions*
+     +  Router de products.
+     +  Router de carts.
+     +  Router de Sessions.
 
    
