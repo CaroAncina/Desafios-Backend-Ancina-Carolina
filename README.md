@@ -44,3 +44,13 @@
 ## 10.Desafío: Documentar API
 
    *Se implementa Swagger para documentar el proyecto, en este caso, los módulos de productos y carritos.*
+
+## 11.Desafío Testing: Modulos de testing
+
+   *Se implementa mocha+chai+supertest como modulos de testing.*
+ - *Se incluyen 3 test desarrollados para:*
+     +  Router de products
+     +  Router de carts
+     +  Router de Sessions*
+
+   
